@@ -9,10 +9,16 @@
     },
     "preferences": [
       {
-        "id": "awful_list_kw",
+        "id": "client-list-tag",
         "type": "keyword",
         "name": "Awful",
         "default_value": "<"
-      }
+      },
+      {
+        "id": "client-list-all",
+        "type": "keyword",
+        "name": "Awful",
+        "default_value": "<>"
+      } 
     ]
   }

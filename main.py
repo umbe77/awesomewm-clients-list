@@ -23,21 +23,28 @@ class AwesomewmClientListExtension(Extension):
 class KeywordQueryEventListener(EventListener):
 
     def on_event(self, event, extension):
+        keyword = event.get_keyword()
+        clientsString = "[]"
+        for id, kw in extension.preferences.items():
+            if kw == keyword:
+                clientsString = self.get_client_string(id, extension)
         search = str(event.get_argument() or '').lower().strip()
         items = []
-
-        clientsString = extension.interface.client_list("{}")
         clients = json.loads(clientsString)
         for clt in clients:
-            if search == '' or search in clt["class"].lower() or search in clt["name"]:
+            if search == '' or search in clt["class"].lower() or search in clt["name"].lower():
                 data = (clt["wid"])
                 items.append(ExtensionResultItem(icon='images/icon.png',
                                                  name=clt["class"],
-                                                 description=clt["name"],
+                                                 description=f'{clt["screen"]} - {clt["tags"][0]["name"]}: {clt["name"]}',
                                                  on_enter=ExtensionCustomAction(data)))
 
         return RenderResultListAction(items)
 
+    def get_client_string(self, id, extension):
+        if id == 'client-list-tag':
+            return extension.interface.client_list('{}')
+        return extension.interface.client_list_all("{}")
 
 class ItemEnterEventListener(EventListener):
 
